@@ -7,6 +7,6 @@
 
 #include "boost/program_options.hpp"
 
-void param_parser(int argc, char** argv);
+void param_parser (int argc, char** argv);
 
 #endif

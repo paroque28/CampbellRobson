@@ -1,13 +1,11 @@
-cmake_minimum_required(VERSION 3.5)
-project(boost_cli)
+CMAKE_MINIMUM_REQUIRED( VERSION 3.5.1 )
 
-set(CMAKE_CXX_STANDARD 98)
+PROJECT( image_viewer )
 
-set(SOURCE_FILES main.cpp)
-add_executable(boost_cli ${SOURCE_FILES})
+FIND_PACKAGE( Boost 1.58 COMPONENTS program_options REQUIRED )
+INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
 
-#Include Boost
-find_package( Boost REQUIRED COMPONENTS program_options)
+FIND_PACKAGE( OpenCV REQUIRED )
 
-include_directories(${Boost_INCLUDE_DIRS})
-target_link_libraries(boost_cli ${Boost_LIBRARIES})
+ADD_EXECUTABle( image_viewer src/main.cpp src/CampbellRobson.tpp src/param_parser.tpp)
+TARGET_LINK_libraries( image_viewer ${OpenCV_LIBS} ${Boost_LIBRARIES} )

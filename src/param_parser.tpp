@@ -1,9 +1,20 @@
+#include <cstdlib>
 #include <iostream>
-#include <boost/program_options.hpp>
+#include <string>
+
+#include "boost/program_options.hpp"
+#include "CampbellRobson.tpp"
+#include "param_parser.hpp"
+
 
 namespace po = boost::program_options;
-int main(int ac, const char* av[]) {
-    // Declare the supported options.
+
+void param_parser(int ac, char** av)
+{
+
+	int _rows = 0;
+	int _cols = 0;
+	// Declare the supported options.
     po::options_description desc("Allowed options");
     desc.add_options()
             ("help,h", "help")
@@ -19,13 +30,20 @@ int main(int ac, const char* av[]) {
 
     if (vm.count("help")) {
         std::cout << desc << "\n";
-        return 1;
+        exit(EXIT_SUCCESS);
     }
 
     if (vm.count("rows")) {
+    	_rows = vm["rows"].as<int>();
         std::cout << "Rows were set to "
              << vm["rows"].as<int>() << ".\n";
-    } else {
+    } if(vm.count("cols")){
+    	_cols = vm["cols"].as<int>();
+    	std::cout << "Rows were set to "
+             << vm["rows"].as<int>() << ".\n";
+    }else {
         std::cout << "Rows were not set.\n";
     }
+
+    generateGrayScaleImage(_rows,_cols);
 }

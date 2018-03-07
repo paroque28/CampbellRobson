@@ -10,11 +10,12 @@ cv::Mat generateMatrix(const int prows, const int pcols)
 	{
 		for(int j = 0; j < storage.cols; ++j)
 		{
-			storage.at<uchar>(i,j) = 128 + 127/(prows-1)*i*sin( pi*(1/(2*pcols-2))*j*j);
-			std::cout << 128 + 127/(prows-1)*i*sin( pi*(1/(2*pcols-2))*j*j) << std::endl;
+			storage.at<uchar>(i,j) = 128 + (127*i)/(prows-1)*sin((pi/2)*1/(pcols-1)*j*j);
 		}
 	}
 
+	//std::cout << "M = " << storage << std::endl;
+	cv::imwrite("CampbellRobson.png",storage);
 	return storage;
 }
 

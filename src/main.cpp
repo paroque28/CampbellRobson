@@ -3,7 +3,7 @@
 #include <string>
 #include "param_parser.tpp"
 
-int main(int ac, char** av)
+int main (int ac, char** av)
 {
-  param_parser(ac, av);
+  param_parser (ac, av);
 }

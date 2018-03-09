@@ -12,7 +12,7 @@ void param_parser (int ac, char** av)
 {
   int _rows = 0;
   int _cols = 0;
-  int _selector = 2;
+  int _selector = 2; //Sets the default function to be the logarithmic one
   int _rowSelec = 0;
 
   // Declare the supported options.
@@ -22,7 +22,7 @@ void param_parser (int ac, char** av)
     ("rows,r", po::value<int>()->default_value(512), "rows")
     ("cols,c", po::value<int>()->default_value(512), "cols")
     ("linear,l", "linear")
-    ("xrow,x", po::value<int>()->default_value(0), "xrow")
+    ("xrow,x", po::value<int>(), "xrow")
     ;
 
   po::variables_map vm;
@@ -57,11 +57,12 @@ void param_parser (int ac, char** av)
   {
   	_selector = 1;
   }
-
+  //Calls the function that generates the image.
   cv::Mat result = generateGrayScaleImage (_rows,_cols,_selector);
+
   if (vm.count ("xrow"))
   {
   	_rowSelec = vm["xrow"].as<int>();
-  	showRow (result, _rowSelec);
+  	showRow (result, _rowSelec, _selector);
   }
 }

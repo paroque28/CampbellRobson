@@ -1,12 +1,15 @@
 #include "CampbellRobson.hpp"
+#include "matplotlibcpp.h"
 
-const double k = 1;
+const double k = 23	; //min frecuency representable
 const uint8_t sine_ma = 128; // sine max amplitude
 const uint8_t ct_mv = 127; // wave contrast max value
 const double pi = 3.1415926535897;
 const char* wlin_name = "Linear Campbell-Robson representation";
 const char* wlog_name = "Logarithm Campbell-Robson representation";
 const char* wrow_name = "View of certain row";
+
+namespace plt = matplotlibcpp;
 
 cv::Mat generateMatrix (const int prows, const int pcols, const int pselector)
 {
@@ -17,10 +20,10 @@ cv::Mat generateMatrix (const int prows, const int pcols, const int pselector)
     {
       for (int j = 0; j < storage.cols; ++j)
       {
-        storage.at<uchar>(i,j) = sine_ma + (ct_mv * i)/(prows-1) * sin ((pi/2) * 1/(pcols-1) * j * j);
+        storage.at<uchar>(i,j) = sine_ma + (ct_mv * i)/(prows-1) * sin ((pi/(2*pi)) * 1/(pcols-1) * j * j); //stores the value of the function in a given C(i,j)
       }
     }
-    cv::imwrite ("LinearCampbellRobson.png",storage);
+    cv::imwrite ("LinearCampbellRobson.png",storage); //saves the picture
   }
   else
   {
@@ -30,7 +33,7 @@ cv::Mat generateMatrix (const int prows, const int pcols, const int pselector)
     {
       for (int j = 0; j < storage.cols; ++j)
       {
-        storage.at<uchar>(i,j) = sine_ma + (ct_mv * k * exp (alphaR * i)) / (prows-1) * sin ((pi/2) * 1/(pcols-1) * pow (k * exp (alphaC * j),2));
+        storage.at<uchar>(i,j) = sine_ma + (ct_mv * k * exp (alphaR * i)) / (prows-1) * sin ((pi/(2*pi)) * 1/(pcols-1) * pow (k * exp (alphaC * j),2));
       }
     }
     cv::imwrite ("LogCampbellRobson.png",storage);
@@ -53,19 +56,36 @@ cv::Mat generateGrayScaleImage (const int prows, const int pcols, const int psel
       cv::namedWindow (wlog_name,CV_WINDOW_AUTOSIZE);
       cv::imshow (wlog_name, matrixFormed);
     }
-    cv::waitKey (0);
+    cv::waitKey (0); //waits until one key is pressed to continue the execution
     return matrixFormed;
   }
   return matrixFormed;
 }
 
-void showRow (cv::Mat pimage, int prow)
+void showRow (cv::Mat pimage, int prow, const int pselector)
 {
-  int cols = pimage.cols;
-  cv::Mat show = cv::Mat::zeros (1,cols, CV_8UC1);
+	int _cols = pimage.cols;
+  int _rows = pimage.rows;
+	double alphaR = log ((_rows-1)/k)/(_rows-1);
+  double alphaC = log ((_cols-1)/k)/(_cols-1);
+  std::vector<double> sine(_cols);
+  std::vector<double> pos(_cols);
+  if(pselector == 1){
+  	for(int j = 0; j < _cols; ++j)
+	  {
+	  	sine.at(j) = sine_ma + (ct_mv * prow)/(_rows-1) * sin ((pi/(2*pi)) * 1/(_cols-1) * j * j);
+	  	pos.at(j) = j;
+	  }
+  }
+  else
+  {
+  	for(int j = 0; j < _cols; ++j)
+	  {
+	  	sine.at(j) = sine_ma + (ct_mv * k * exp (alphaR * prow)) / (_rows-1) * sin ((pi/(2*pi)) * 1/(_cols-1) * pow (k * exp (alphaC * j),2));
+	  	pos.at(j) = j;
+	  }
+  }
 
-  cv::namedWindow (wrow_name, CV_WINDOW_AUTOSIZE);
-  cv::imshow (wrow_name, pimage.row (prow));
-  cv::waitKey (0);
-  show.release ();
+  plt::plot(pos,sine); //plots in python the sine function to a given row and from 0 to _cols
+  plt::show(); //shows the plot
 }

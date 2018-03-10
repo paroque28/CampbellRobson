@@ -60,10 +60,10 @@ struct _interpreter {
     PyObject *s_python_function_stem;
     PyObject *s_python_function_xkcd;
 
-    /* For now, _interpreter is implemented as a singleton since its currently not possible to have
+    /* For now, _interpreter is implemented as a singleton since it's currently not possible to have
        multiple independent embedded python interpreters without patching the python source code
        or starting a separate process for each.
-        http://bytes.com/topic/python/answers/793370-multiple-independent-python-interpreters-c-c-program
+       source: http://bytes.com/topic/python/answers/793370-multiple-independent-python-interpreters-c-c-program
        */
 
     static _interpreter& get() {

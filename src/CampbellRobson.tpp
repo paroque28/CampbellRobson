@@ -1,13 +1,12 @@
 #include "CampbellRobson.hpp"
 #include "matplotlibcpp.h"
 
-const double k = 23	; //min frecuency representable
+const double k = 23	; //min representable frecuency
 const uint8_t sine_ma = 128; // sine max amplitude
 const uint8_t ct_mv = 127; // wave contrast max value
 const double pi = 3.1415926535897;
 const char* wlin_name = "Linear Campbell-Robson representation";
 const char* wlog_name = "Logarithm Campbell-Robson representation";
-const char* wrow_name = "View of certain row";
 
 namespace plt = matplotlibcpp;
 
